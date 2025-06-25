@@ -1,0 +1,13 @@
+module Test;
+
+import EZS;
+
+test : IO ();
+test = (
+    // Run "grep \"ERROR\"" with ez_run_wi_o, and stream the input "[E]ERROR\n[I]INFO\n[D]DEBUG\n" to it.
+    let input = "[E]ERROR\n[I]INFO\n[D]DEBUG\n";
+    let stdout = *ez_run_wi_o(EZSConfig::default, ["grep", "ERROR"], input);
+    assert_eq(|_|"1", stdout, "[E]ERROR\n");;
+
+    pure()
+);
