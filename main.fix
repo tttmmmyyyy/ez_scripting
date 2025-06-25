@@ -148,4 +148,4 @@ ez_cd = |dir| (
     pure()
 );
 
-// TODO: Add `ez_pwd : IO String`;
+// TODO: Add `ez_cwd : IO String`;
