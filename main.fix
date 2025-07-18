@@ -1,3 +1,6 @@
+// Provides a simple interface for running commands.
+//
+// Example usage: TBA but see [fixlang-docpage-generator](https://github.com/tttmmmyyyy/fixlang-docpage-generator/blob/main/main.fix).
 module EZS;
 
 import Subprocess;
