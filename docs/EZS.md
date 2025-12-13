@@ -1,6 +1,6 @@
 # EZS
 
-Defined in ez-scripting@0.1.0
+Defined in ez-scripting@0.2.0
 
 Provides a simple interface for running commands.
 
@@ -12,12 +12,13 @@ Example usage: TBA but see [fixlang-docpage-generator](https://github.com/tttmmm
 
 #### ez_cd
 
-Type: `Std::String -> Std::IO ()`
+Type: `EZS::EZSConfig -> Std::String -> Std::IO ()`
 
 Changes the current working directory to the specified path.
 
 ##### Parameters
 
+- `config`: The configuration for EZS.
 - `dir`: The directory to change to, as a string.
 
 #### ez_run_o
