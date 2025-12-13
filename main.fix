@@ -139,9 +139,13 @@ _check_exit_code = |code, command| (
 // Changes the current working directory to the specified path.
 //
 // # Parameters
+// - `config`: The configuration for EZS.
 // - `dir`: The directory to change to, as a string.
-ez_cd : String -> IO ();
-ez_cd = |dir| (
+ez_cd : EZSConfig -> String -> IO ();
+ez_cd = |config, dir| (
+    when(config.@execution_trace, 
+        eprintln("cd " + dir)
+    );;
     let code = *dir.borrow_c_str_io(|c_str| FFI_CALL_IO[CInt chdir(Ptr), c_str]);
     when(code != 0.to_CInt, 
         let msg = "error: Failed to change directory to " + dir;
