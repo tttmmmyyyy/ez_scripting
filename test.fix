@@ -5,8 +5,9 @@ import EZS;
 test : IO ();
 test = (
     // Run "grep \"ERROR\"" with ez_run_wi_o, and stream the input "[E]ERROR\n[I]INFO\n[D]DEBUG\n" to it.
+    let ctx = EZS::Context::default;
     let input = "[E]ERROR\n[I]INFO\n[D]DEBUG\n";
-    let stdout = *ez_run_wi_o(EZS::Context::default, ["grep", "ERROR"], input);
+    let stdout = *ctx.run_wi_o(["grep", "ERROR"], input);
     assert_eq(|_|"1", stdout, "[E]ERROR\n");;
 
     pure()

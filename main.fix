@@ -32,8 +32,8 @@ namespace Context {
 // # Parameters
 // - `commands`: The command to run, as an array of strings, e.g., `["ls", "-l"]`.
 // - `ctx`: The context for EZS.
-ez_run_oec : Array String -> Context -> IO (String, String, U8);
-ez_run_oec = |commands, config| ez_run_wi_oec(commands, "", config);
+run_oec : Array String -> Context -> IO (String, String, U8);
+run_oec = |commands, config| run_wi_oec(commands, "", config);
 
 // Run a command and return its stdout ("o") and stderr ("e").
 // If the command fails, the program will exit with code 1.
@@ -41,8 +41,8 @@ ez_run_oec = |commands, config| ez_run_wi_oec(commands, "", config);
 // # Parameters
 // - `commands`: The command to run, as an array of strings, e.g., `["ls", "-l"]`.
 // - `ctx`: The context for EZS.
-ez_run_oe : Array String -> Context -> IO (String, String);
-ez_run_oe = |commands, ctx| ez_run_wi_oe(commands, "", ctx);
+run_oe : Array String -> Context -> IO (String, String);
+run_oe = |commands, ctx| run_wi_oe(commands, "", ctx);
 
 // Run a command and return its stdout ("o").
 // 
@@ -51,8 +51,8 @@ ez_run_oe = |commands, ctx| ez_run_wi_oe(commands, "", ctx);
 // # Parameters
 // - `commands`: The command to run, as an array of strings, e.g., `["ls", "-l"]`.
 // - `ctx`: The context for EZS.
-ez_run_o : Array String -> Context -> IO String;
-ez_run_o = |commands, ctx| ez_run_wi_o(commands, "", ctx);
+run_o : Array String -> Context -> IO String;
+run_o = |commands, ctx| run_wi_o(commands, "", ctx);
 
 // Run a command with input ("wi") and return its stdout ("o"), stderr ("e") and exit code ("c").
 //
@@ -60,8 +60,8 @@ ez_run_o = |commands, ctx| ez_run_wi_o(commands, "", ctx);
 // - `commands`: The command to run, as an array of strings, e.g., `["grep", "ERROR"]`.
 // - `input`: The input to provide to stdin of the command.
 // - `ctx`: The context for EZS.
-ez_run_wi_oec : Array String -> String -> Context -> IO (String, String, U8);
-ez_run_wi_oec = |commands, input, ctx| (
+run_wi_oec : Array String -> String -> Context -> IO (String, String, U8);
+run_wi_oec = |commands, input, ctx| (
     let commands_str = commands.to_iter.join(" ");
     when(ctx.@execution_trace, 
         eprintln(commands_str)
@@ -78,9 +78,9 @@ ez_run_wi_oec = |commands, input, ctx| (
 // - `commands`: The command to run, as an array of strings, e.g., `["grep", "ERROR"]`.
 // - `input`: The input to provide to stdin of the command.
 // - `ctx`: The context for EZS.
-ez_run_wi_oe : Array String -> String -> Context -> IO (String, String);
-ez_run_wi_oe = |commands, input, ctx| (
-    let (out, err, code) = *ez_run_wi_oec(commands, input, ctx);
+run_wi_oe : Array String -> String -> Context -> IO (String, String);
+run_wi_oe = |commands, input, ctx| (
+    let (out, err, code) = *run_wi_oec(commands, input, ctx);
     _check_exit_code(code, commands.to_iter.join(" "));;
     pure $ (out, err)
 );
@@ -93,9 +93,9 @@ ez_run_wi_oe = |commands, input, ctx| (
 // - `commands`: The command to run, as an array of strings, e.g., `["grep", "ERROR"]`.
 // - `input`: The input to provide to stdin of the command.
 // - `ctx`: The context for EZS.
-ez_run_wi_o : Array String -> String -> Context -> IO String;
-ez_run_wi_o = |commands, input, ctx| (
-    let (out, _, code) = *ez_run_wi_oec(commands, input, ctx);
+run_wi_o : Array String -> String -> Context -> IO String;
+run_wi_o = |commands, input, ctx| (
+    let (out, _, code) = *run_wi_oec(commands, input, ctx);
     _check_exit_code(code, commands.to_iter.join(" "));;
     pure $ out
 );
@@ -105,8 +105,8 @@ ez_run_wi_o = |commands, input, ctx| (
 // # Parameters
 // - `dir`: The directory to change to, as a string.
 // - `ctx`: The context for EZS.
-ez_cd : String -> Context -> IO ();
-ez_cd = |dir, ctx| (
+cd : String -> Context -> IO ();
+cd = |dir, ctx| (
     when(ctx.@execution_trace, 
         eprintln("cd " + dir)
     );;
