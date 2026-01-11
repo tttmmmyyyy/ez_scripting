@@ -1,14 +1,20 @@
 module Test;
 
-import EZS;
+import EZS::{run_wi_o, Context::default};
+import Std::{IO, Debug::assert_eq, Monad::pure};
 
 test : IO ();
 test = (
-    // Run "grep \"ERROR\"" with ez_run_wi_o, and stream the input "[E]ERROR\n[I]INFO\n[D]DEBUG\n" to it.
+    // Run "grep \"ERROR\"" with run_wi_o, and stream the input "[E]ERROR\n[I]INFO\n[D]DEBUG\n" to it.
     let ctx = EZS::Context::default;
     let input = "[E]ERROR\n[I]INFO\n[D]DEBUG\n";
     let stdout = *ctx.run_wi_o(["grep", "ERROR"], input);
     assert_eq(|_|"1", stdout, "[E]ERROR\n");;
+
+    // Create directory "test_dir" and change to it.
+    // let dir_name = "test_dir";
+    // ctx.run_o(["mkdir", dir_name]);;
+    // ctx.cd(dir_name);;
 
     pure()
 );

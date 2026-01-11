@@ -3,7 +3,12 @@
 // Example usage: TBA but see [fixlang-docpage-generator](https://github.com/tttmmmyyyy/fixlang-docpage-generator/blob/main/main.fix).
 module EZS;
 
-import Subprocess;
+import Std::{
+    Array, Bool, IO, String, U8, Array::{to_iter, @}, I64::to_CInt, 
+    IO::{eprintln, exit, exit_with_msg, IOFail::try}, Monad::{pure, when}, 
+    String::{borrow_c_str_io, get_size, join}, ToString::to_string
+};
+import Subprocess::{run_string, ExitStatus};
 
 // Context and configuration for EZS.
 type Context = struct {
