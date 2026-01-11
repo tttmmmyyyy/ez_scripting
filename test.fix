@@ -1,7 +1,7 @@
 module Test;
 
-import EZS::{run_wi_o, Context::default};
-import Std::{IO, Debug::assert_eq, Monad::pure};
+import EZS::{cd, cwd, run_o, run_wi_o, Context::default};
+import Std::{IO, Debug::{assert, assert_eq}, IO::println, Monad::pure, String::ends_with};
 
 test : IO ();
 test = (
@@ -12,9 +12,13 @@ test = (
     assert_eq(|_|"1", stdout, "[E]ERROR\n");;
 
     // Create directory "test_dir" and change to it.
-    // let dir_name = "test_dir";
-    // ctx.run_o(["mkdir", dir_name]);;
-    // ctx.cd(dir_name);;
+    let dir_name = "test_dir";
+    ctx.run_o(["mkdir", "-p", dir_name]);;
+    ctx.cd(dir_name);;
+    // Get current working directory and check if it ends with "test_dir".
+    let cwd = *ctx.cwd;
+    assert(|_|"", cwd.ends_with(dir_name));;
+    ctx.cd("..");;
 
     pure()
 );

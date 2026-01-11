@@ -4,9 +4,10 @@
 module EZS;
 
 import Std::{
-    Array, Bool, IO, String, U8, Array::{to_iter, @}, I64::to_CInt, 
-    IO::{eprintln, exit, exit_with_msg, IOFail::try}, Monad::{pure, when}, 
-    String::{borrow_c_str_io, get_size, join}, ToString::to_string
+    undefined, Array, Bool, IO, String, U8, Array::{@, fill, push_back, to_iter}, FFI::mutate_boxed_io, 
+    FromBytes::from_bytes, I64::to_CInt, IO::{eprintln, exit, exit_with_msg, IOFail::try}, 
+    Monad::{pure, when}, Result::as_ok, String::{borrow_c_str_io, get_size, join}, ToCSizeT::c_size_t, 
+    ToString::to_string
 };
 import Subprocess::{run_string, ExitStatus};
 
@@ -28,7 +29,7 @@ namespace Context {
     // `execution_trace` is false, `eprint_stderr` is true.
     default : Context = Context {
         execution_trace : false,
-        eprint_stderr : true
+        eprint_stderr : true,
     };
 }
 
@@ -124,6 +125,28 @@ cd = |dir, ctx| (
     pure()
 );
 
+// Returns the current working directory as a string.
+// 
+// # Parameters
+// - `ctx`: The context for EZS.
+cwd : Context -> IO String;
+cwd = |ctx| (
+    when(ctx.@execution_trace, 
+        eprintln("cwd")
+    );;
+    let buf_size = 4096;
+    let buf = Array::fill(buf_size, '\0');
+    let (buf, retval) = *buf.mutate_boxed_io(|buf_ptr|
+        FFI_CALL_IO[Ptr getcwd(Ptr, CSizeT), buf_ptr, buf_size.c_size_t]
+    );
+    when(retval == nullptr, 
+        let msg = "error: Failed to get current working directory";
+        eprintln(msg);;
+        exit(1)
+    );;
+    from_bytes(buf).as_ok.pure
+);
+
 // Check the exit status and exit the program if it is `signaled` or `wait_failed`.
 //
 // Returns the exit code if the status is `exit`.
@@ -158,5 +181,3 @@ _check_exit_code = |code, command| (
     );;
     pure()
 );
-
-// TODO: Add `ez_cwd : IO String`;
