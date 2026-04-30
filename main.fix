@@ -4,10 +4,9 @@
 module EZS;
 
 import Std::{
-    undefined, Array, Bool, IO, String, U8, Array::{@, fill, push_back, to_iter}, FFI::mutate_boxed_io, 
-    FromBytes::from_bytes, I64::to_CInt, IO::{eprintln, exit, exit_with_msg, IOFail::try}, 
-    Monad::{pure, when}, Result::as_ok, String::{borrow_c_str_io, get_size, join}, ToCSizeT::c_size_t, 
-    ToString::to_string
+    Array, Bool, IO, String, U8, Array::{fill, to_iter, @}, FFI::mutate_boxed_io, FromBytes::from_bytes, 
+    IO::{eprintln, exit, exit_with_msg, IOFail::try}, Monad::{pure, when}, Result::as_ok, 
+    String::{borrow_c_str_io, join, @size}, ToCInt::c_int, ToCSizeT::c_size_t, ToString::to_string
 };
 import Subprocess::{run_string, ExitStatus};
 
@@ -73,7 +72,7 @@ run_wi_oec = |commands, input, ctx| (
         eprintln(commands_str)
     );;
     let ((out, err), status) = *Subprocess::run_string(commands.@(0), commands, input).try(exit_with_msg(1));
-    when(ctx.@eprint_stderr && err.get_size > 0, eprintln(err));;
+    when(ctx.@eprint_stderr && err.@size > 0, eprintln(err));;
     let code = *_check_exit_status(status, commands_str);
     pure $ (out, err, code)
 );
@@ -117,7 +116,7 @@ cd = |dir, ctx| (
         eprintln("cd " + dir)
     );;
     let code = *dir.borrow_c_str_io(|c_str| FFI_CALL_IO[CInt chdir(Ptr), c_str]);
-    when(code != 0.to_CInt, 
+    when(code != 0.c_int,
         let msg = "error: Failed to change directory to " + dir;
         eprintln(msg);;
         exit(1)

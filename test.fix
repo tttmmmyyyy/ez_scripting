@@ -1,7 +1,7 @@
 module Test;
 
 import EZS::{cd, cwd, run_o, run_wi_o, Context::default};
-import Std::{IO, Debug::{assert, assert_eq}, IO::println, Monad::pure, String::ends_with};
+import Std::{IO, Debug::{assert, assert_eq}, Monad::pure, String::ends_with};
 
 test : IO ();
 test = (
