@@ -4,7 +4,7 @@
 module EZS;
 
 import Std::{
-    Array, Bool, IO, String, U8, Array::{fill, to_iter, @}, FFI::mutate_boxed_io, FromBytes::from_bytes, 
+    Array, Bool, IO, String, U8, Array::{fill, to_iter, @, mutate_elements_io}, FromBytes::from_bytes,
     IO::{eprintln, exit, exit_with_msg, IOFail::try}, Monad::{pure, when}, Result::as_ok, 
     String::{borrow_c_str_io, join, @size}, ToCInt::c_int, ToCSizeT::c_size_t, ToString::to_string
 };
@@ -135,7 +135,7 @@ cwd = |ctx| (
     );;
     let buf_size = 4096;
     let buf = Array::fill(buf_size, '\0');
-    let (buf, retval) = *buf.mutate_boxed_io(|buf_ptr|
+    let (buf, retval) = *buf.mutate_elements_io(|buf_ptr|
         FFI_CALL_IO[Ptr getcwd(Ptr, CSizeT), buf_ptr, buf_size.c_size_t]
     );
     when(retval == nullptr, 

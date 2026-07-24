@@ -3,10 +3,10 @@
 name = "ez-scripting"
 
 ## Project version (in semver). This is a required field.
-version = "0.3.2"
+version = "0.4.0"
 
 ## Fix version requirement. Default is "*".
-fix_version = "1.2.0"
+fix_version = "1.5.0"
 
 ## Project authors.
 # authors = ["Alice", "Bob"]
@@ -93,5 +93,5 @@ files = ["test.fix"]
 
 [[dependencies]]
 name = "subprocess"
-version = "1.0.5"
+version = "2.0.0"
 git = { url = "https://github.com/tttmmmyyyy/fixlang-subprocess.git" }
