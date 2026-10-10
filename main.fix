@@ -1,6 +1,20 @@
 // Provides a simple interface for running commands.
 //
-// Example usage: TBA but see [fixlang-docpage-generator](https://github.com/tttmmmyyyy/fixlang-docpage-generator/blob/main/main.fix).
+// A command is an array of the program and its arguments, such as `["ls", "-l"]`. Every function
+// takes a `Context`, which says whether to print the commands it runs and their stderr. `run_o`
+// runs a command and returns its stdout, and `run_wi_o` gives the command an input too; both end
+// the program if the command fails.
+//
+// ```fix no_run
+// let ctx = default.set_execution_trace(true);
+// ctx.run_o(["mkdir", "-p", "build"]);;
+// ctx.cd("build");;
+// let files = *ctx.run_o(["ls"]);
+// let errors = *ctx.run_wi_o(["grep", "ERROR"], "[E]ERROR\n[I]INFO\n");   // "[E]ERROR\n"
+// println(files + errors)
+// ```
+//
+// For a larger example, see [fixlang-docpage-generator](https://github.com/tttmmmyyyy/fixlang-docpage-generator/blob/main/main.fix).
 module EZS;
 
 import Std::{
